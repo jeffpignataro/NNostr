@@ -1,7 +1,4 @@
 using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -10,7 +7,6 @@ using BTCPayServer.Client.Models;
 using LinqKit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NBitcoin;
 using Newtonsoft.Json.Linq;
-using NNostr.Client;
+using Npgsql;
 using Relay.Data;
 
 namespace Relay
@@ -43,8 +39,9 @@ namespace Relay
                 {
                     throw new Exception("Database: Connection string not set");
                 }
-
-                builder.UseNpgsql(connString, optionsBuilder => { optionsBuilder.EnableRetryOnFailure(10); });
+                var connStringBuilder = new NpgsqlConnectionStringBuilder(connString);
+                connStringBuilder.Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+                builder.UseNpgsql(connStringBuilder.ConnectionString, optionsBuilder => { optionsBuilder.EnableRetryOnFailure(10); });
                 builder.WithExpressionExpanding();
             });
             services.AddHostedService<MigrationHostedService>();
@@ -143,9 +140,9 @@ namespace Relay
                     {
                         Expiration = TimeSpan.MaxValue
                     },
-                    AdditionalSearchTerms = new []{"nostr", pubkey}
+                    AdditionalSearchTerms = new[] { "nostr", pubkey }
                 });
-           
+
         }
     }
 }
