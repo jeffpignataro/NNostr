@@ -59,3 +59,11 @@ export POSTGRES_PASSWORD=strong_password_here
 or
 echo "POSTGRES_PASSWORD=strong_password_here" >> .env
 ```
+
+### NNOSTR-UI
+
+_Prerequiste_ Install `wasm-tools`
+
+```
+dotnet workload restore
+```

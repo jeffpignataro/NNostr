@@ -1,0 +1,22 @@
+services:
+  relay:
+    build:
+      context: ./Relay
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+  ui:
+    build:
+      context: ./NNostr.UI
+      dockerfile: Dockerfile
+    ports:
+      - 81:81
+      - 444:444
+  client:
+    build:
+      context: ./NNostr.Client
+      dockerfile: Dockerfile
+    ports:
+      - 82:82
+      - 445:445
