@@ -6,9 +6,9 @@ EXPOSE 445
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["NNostr.Client.csproj", "NNostr.Client/"]
-RUN dotnet restore "NNostr.Client.csproj"
-COPY . .
+RUN dotnet restore "NNostr.Client/NNostr.Client.csproj"
 WORKDIR "/src/NNostr.Client"
+COPY . .
 RUN dotnet build "NNostr.Client.csproj" -c Release -o /app/build
 
 FROM build AS publish

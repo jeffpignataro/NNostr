@@ -4,11 +4,14 @@ EXPOSE 81
 EXPOSE 444
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+RUN apt-get update
+RUN apt-get -y install python3
 WORKDIR /src
-COPY ["NNostr.UI/NNostr.UI.csproj", "NNostr.UI/"]
-RUN dotnet restore "NNostr.UI.csproj"
-COPY . .
+COPY ["NNostr.UI.csproj", "NNostr.UI/"]
+RUN dotnet workload restore "NNostr.UI/NNostr.UI.csproj"
+RUN dotnet restore "NNostr.UI/NNostr.UI.csproj"
 WORKDIR "/src/NNostr.UI"
+COPY . .
 RUN dotnet build "NNostr.UI.csproj" -c Release -o /app/build
 
 FROM build AS publish

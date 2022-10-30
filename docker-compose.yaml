@@ -1,18 +1,34 @@
 services:
+  db:
+    image: postgres:13.1
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGPORT=65466
+    volumes:
+      - "db:/var/lib/postgresql/data"
+    ports:
+      - "65466:65466"
+    expose:
+      - "65466"
   relay:
     build:
       context: ./Relay
       dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - POSTGRES_PASSWORD=postgres
     ports:
       - 80:80
       - 443:443
-  ui:
-    build:
-      context: ./NNostr.UI
-      dockerfile: Dockerfile
-    ports:
-      - 81:81
-      - 444:444
+  # ui:
+  #   build:
+  #     context: ./NNostr.UI
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 81:81
+  #     - 444:444
   client:
     build:
       context: ./NNostr.Client
@@ -20,3 +36,6 @@ services:
     ports:
       - 82:82
       - 445:445
+volumes:
+  db:
+    driver: local

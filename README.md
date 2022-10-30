@@ -2,7 +2,12 @@
 
 [Additional details regarding NNOSTR protocol](https://github.com/nostr-protocol/nostr)
 
-## Setup Instructions
+## Automated Run
+
+Use `docker compose up` from the root of the solution to run the application.
+_NOTE_ Due to the `dotnet workload restore` of the `wasm-tools`, the `NNOSTR-UI` project will take around _10 mins_ to build the `UI` container (depending on internet connection).
+
+## Manual Setup Instructions
 
 ### Relay
 
